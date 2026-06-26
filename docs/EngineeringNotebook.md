@@ -427,3 +427,25 @@ Common examples:
 Why?
 
 Some files are generated automatically, contain personal settings, or contain secrets.
+
+# Git Workflow
+
+Git follows a three-step workflow:
+
+1. Modify files
+2. Stage changes
+3. Commit changes
+
+Example:
+
+git add .
+
+git commit -m "Add response submission feature"
+
+---
+
+## Staging Area
+
+The staging area is a temporary holding area where Git collects changes before creating a commit.
+
+It allows developers to choose exactly what will be included in the next project snapshot.
