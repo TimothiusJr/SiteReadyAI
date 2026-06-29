@@ -449,3 +449,159 @@ git commit -m "Add response submission feature"
 The staging area is a temporary holding area where Git collects changes before creating a commit.
 
 It allows developers to choose exactly what will be included in the next project snapshot.
+
+# Git Working Tree vs Staging Area
+
+Git tracks changes in three places:
+
+1. Working Directory
+2. Staging Area
+3. Commit History
+
+## Working Directory
+
+Contains the current files being edited.
+
+## Staging Area
+
+Contains the changes selected for the next commit.
+
+Files can continue changing after they have been staged.
+
+Running `git add` again updates the staged version.
+
+## Commit History
+
+A permanent snapshot of the staged files.
+
+# Data Layer
+
+The `data` folder stores application data that the UI uses.
+
+During early development, it acts as a temporary database.
+
+Example:
+
+src/
+data/
+scenarios.js
+
+Benefits:
+
+- Keeps UI components clean
+- Separates data from presentation
+- Makes adding new scenarios simple
+- Makes replacing local data with a database easier later
+
+# Product Principle #1
+
+Every feature must solve a user problem.
+
+Before adding a feature, ask:
+
+- Who is this helping?
+- What problem does it solve?
+- Is there a simpler solution?
+
+# Project Root vs React Project
+
+SiteReadyAI is the project root.
+
+The React application lives inside the `client` folder.
+
+Git commands are run from:
+
+SiteReadyAI/
+
+Examples:
+
+git status
+
+git add .
+
+git commit
+
+React commands are run from:
+
+SiteReadyAI/client/pwd
+
+
+Examples:
+
+npm install
+
+npm run dev
+
+
+# Factory Function
+
+A factory function creates and returns new objects or arrays.
+
+Example:
+
+createInitialProgress(scenarios)
+
+Benefits:
+
+- Prevents shared mutable data
+- Creates fresh copies
+- Easier to reuse
+- Easier to test
+
+# Single Source of Truth
+
+The application stores learner progress in one place:
+
+App.jsx
+
+Reason:
+
+- Dashboard needs progress.
+- Scenario page updates progress.
+- Future Progress page will display progress.
+
+Keeping one owner for the data avoids duplicate or inconsistent state.
+
+---
+
+# Progress Model
+
+Each scenario has one progress object.
+
+Fields:
+
+- scenarioId
+- completed
+- score
+- completedAt
+- attempts
+
+This structure scales as more scenarios are added.
+
+
+# Immutable State Updates
+
+React state should not be modified directly.
+
+Instead of changing an existing object or array, create a new one.
+
+Common pattern:
+
+1. Use `map()` to create a new array.
+2. Use the spread operator (`...`) to copy an object.
+3. Update only the properties that changed.
+
+Example:
+
+Old Object
+↓
+
+Copy Object
+
+↓
+
+Update Copy
+
+↓
+
+Replace State

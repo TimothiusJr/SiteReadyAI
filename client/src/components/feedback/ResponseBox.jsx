@@ -1,4 +1,4 @@
-function ResponseBox({ answer, setAnswer, feedback, handleSubmit }) {
+function ResponseBox({ answer, setAnswer, handleSubmit }) {
     return (
         <div className="section-block">
             <h3>Your Response</h3>
@@ -15,8 +15,6 @@ function ResponseBox({ answer, setAnswer, feedback, handleSubmit }) {
             <button type="button" onClick={handleSubmit}>
                 Submit Response
             </button>
-
-            {feedback && <p className="feedback">{feedback}</p>}
         </div>
     )
 }
