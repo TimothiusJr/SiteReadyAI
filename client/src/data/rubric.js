@@ -1,0 +1,68 @@
+export const rubric = [
+    {
+        id: 'staffing',
+        title: 'Staffing Readiness',
+        points: 20,
+        keywords: [
+            'staff',
+            'staffing',
+            'personnel',
+            'nurse',
+            'nursing',
+            'oncologist',
+            'infusion team',
+        ],
+    },
+    {
+        id: 'monitoring',
+        title: 'Patient Monitoring',
+        points: 20,
+        keywords: [
+            'monitor',
+            'monitoring',
+            'observation',
+            'follow-up',
+            'vital signs',
+            'overnight',
+        ],
+    },
+    {
+        id: 'crs',
+        title: 'CRS Management',
+        points: 20,
+        keywords: [
+            'crs',
+            'cytokine release syndrome',
+            'escalation',
+            'toxicity',
+            'adverse event',
+            'emergency',
+        ],
+    },
+    {
+        id: 'protocol',
+        title: 'Protocol Readiness',
+        points: 20,
+        keywords: [
+            'protocol',
+            'workflow',
+            'process',
+            'procedure',
+            'guideline',
+            'standard operating procedure',
+        ],
+    },
+    {
+        id: 'pharmacy',
+        title: 'Pharmacy Readiness',
+        points: 20,
+        keywords: [
+            'pharmacy',
+            'pharmacist',
+            'medication',
+            'dispensing',
+            'inventory',
+            'preparation',
+        ],
+    },
+]

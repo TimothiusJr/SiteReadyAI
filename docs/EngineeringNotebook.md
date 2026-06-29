@@ -605,3 +605,84 @@ Update Copy
 ↓
 
 Replace State
+
+# Service Layer
+
+A service acts as a middle layer between the UI and the data.
+
+Instead of React reading data directly, it asks a service.
+
+Benefits:
+
+- Separates business logic from the UI.
+- Makes changing data sources easier.
+- Supports future APIs and databases.
+- Improves maintainability.
+
+Example:
+
+Dashboard
+
+↓
+
+Scenario Service
+
+↓
+
+Scenario Data
+
+↓
+
+Database (future)
+
+# Layout Components
+
+A layout component provides the common structure shared by multiple pages.
+
+Examples:
+
+- Header
+- Sidebar
+- Footer
+- Main Content Area
+
+Instead of repeating these on every page, they are placed inside a layout component.
+
+React's `children` prop allows different pages to be rendered inside the same layout.
+
+# React Router
+
+React Router provides client-side routing.
+
+Instead of conditionally rendering pages based on state, it maps URLs to React components.
+
+Benefits:
+
+- Browser history support
+- Bookmarkable URLs
+- Better navigation
+- Cleaner application architecture
+
+Example:
+
+/dashboard
+/scenario
+/progress
+/resources
+
+# Client-Server Architecture
+
+The frontend (client) is responsible for:
+
+- Displaying the user interface
+- Handling user interaction
+- Sending requests to the backend
+
+The backend (server) is responsible for:
+
+- Processing requests
+- Applying business logic
+- Accessing the database
+- Returning responses
+
+Communication between the client and server happens using HTTP.

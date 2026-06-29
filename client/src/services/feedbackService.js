@@ -1,39 +1,22 @@
+import { rubric } from '../data/rubric'
+
 export function generateFeedback(answer) {
     const lowerCaseAnswer = answer.toLowerCase()
-
-    const criteria = [
-        {
-            keyword: 'staff',
-            points: 20,
-        },
-        {
-            keyword: 'monitor',
-            points: 20,
-        },
-        {
-            keyword: 'crs',
-            points: 20,
-        },
-        {
-            keyword: 'protocol',
-            points: 20,
-        },
-        {
-            keyword: 'pharmacy',
-            points: 20,
-        },
-    ]
 
     let score = 0
     const strengths = []
     const improvements = []
 
-    criteria.forEach((criterion) => {
-        if (lowerCaseAnswer.includes(criterion.keyword)) {
-            score += criterion.points
-            strengths.push(`Mentioned ${criterion.keyword}`)
+    rubric.forEach((category) => {
+        const matched = category.keywords.some((keyword) =>
+            lowerCaseAnswer.includes(keyword),
+        )
+
+        if (matched) {
+            score += category.points
+            strengths.push(`Addressed ${category.title}`)
         } else {
-            improvements.push(`Consider discussing ${criterion.keyword}`)
+            improvements.push(`Consider discussing ${category.title}`)
         }
     })
 
@@ -42,6 +25,6 @@ export function generateFeedback(answer) {
         strengths,
         improvements,
         message:
-            'Feedback generated using an early keyword-based scoring engine. AI feedback will replace this later.',
+            'Feedback generated using a rubric-based scoring engine. AI feedback will replace or enhance this later.',
     }
 }
