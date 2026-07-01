@@ -6,6 +6,8 @@ import MainLayout from './layouts/MainLayout'
 import { createInitialProgress } from './data/progressTemplate'
 import { getAllScenarios } from './services/scenarioService'
 import { generateFeedback } from './services/feedbackService'
+import LoginPage from './pages/LoginPage'
+import ProtectedRoute from './components/common/ProtectedRoute'
 import './App.css'
 
 function App() {
@@ -99,32 +101,38 @@ function App() {
             <Routes>
                 <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
+                <Route path="/login" element={<LoginPage />} />
+
                 <Route
                     path="/dashboard"
                     element={
-                        <DashboardPage
-                            scenarios={scenarios}
-                            progress={progress}
-                            onSelectScenario={handleSelectScenario}
-                        />
+                        <ProtectedRoute>
+                            <DashboardPage
+                                scenarios={scenarios}
+                                progress={progress}
+                                onSelectScenario={handleSelectScenario}
+                            />
+                        </ProtectedRoute>
                     }
                 />
 
                 <Route
                     path="/scenario"
                     element={
-                        selectedScenario ? (
-                            <ScenarioPage
-                                scenario={selectedScenario}
-                                answer={answer}
-                                setAnswer={setAnswer}
-                                feedback={feedback}
-                                handleSubmit={handleSubmit}
-                                handleBackToDashboard={handleBackToDashboard}
-                            />
-                        ) : (
-                            <Navigate to="/dashboard" replace />
-                        )
+                        <ProtectedRoute>
+                            {selectedScenario ? (
+                                <ScenarioPage
+                                    scenario={selectedScenario}
+                                    answer={answer}
+                                    setAnswer={setAnswer}
+                                    feedback={feedback}
+                                    handleSubmit={handleSubmit}
+                                    handleBackToDashboard={handleBackToDashboard}
+                                />
+                            ) : (
+                                <Navigate to="/dashboard" replace />
+                            )}
+                        </ProtectedRoute>
                     }
                 />
             </Routes>
