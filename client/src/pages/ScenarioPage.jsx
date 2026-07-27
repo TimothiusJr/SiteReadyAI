@@ -5,6 +5,7 @@ function ScenarioPage({
                           answer,
                           setAnswer,
                           feedback,
+                          isSubmitting,
                           handleSubmit,
                           handleBackToDashboard,
                       }) {
@@ -14,6 +15,7 @@ function ScenarioPage({
             answer={answer}
             setAnswer={setAnswer}
             feedback={feedback}
+            isSubmitting={isSubmitting}
             handleSubmit={handleSubmit}
             handleBackToDashboard={handleBackToDashboard}
         />

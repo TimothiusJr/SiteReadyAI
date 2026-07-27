@@ -1,30 +1,28 @@
-import { rubric } from '../data/rubric'
+const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'
 
-export function generateFeedback(answer) {
-    const lowerCaseAnswer = answer.toLowerCase()
-
-    let score = 0
-    const strengths = []
-    const improvements = []
-
-    rubric.forEach((category) => {
-        const matched = category.keywords.some((keyword) =>
-            lowerCaseAnswer.includes(keyword),
-        )
-
-        if (matched) {
-            score += category.points
-            strengths.push(`Addressed ${category.title}`)
-        } else {
-            improvements.push(`Consider discussing ${category.title}`)
-        }
+export async function generateFeedback({
+                                           token,
+                                           scenarioId,
+                                           responseText,
+                                       }) {
+    const response = await fetch(`${API_BASE_URL}/feedback`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+            scenarioId,
+            responseText,
+        }),
     })
 
-    return {
-        score,
-        strengths,
-        improvements,
-        message:
-            'Feedback generated using a rubric-based scoring engine. AI feedback will replace or enhance this later.',
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(data.message || 'Failed to generate AI feedback')
     }
+
+    return data
 }
