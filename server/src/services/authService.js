@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { pool } from '../db/pool.js'
+import pool from '../db/pool.js'
 
 export async function createUser({ name, email, password }) {
     const existingUser = await pool.query(

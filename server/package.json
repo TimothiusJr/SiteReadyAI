@@ -1,16 +1,17 @@
 {
-  "name": "server",
+  "name": "siteready-ai-server",
   "version": "1.0.0",
+  "private": true,
   "type": "module",
-  "description": "",
-  "main": "index.js",
+  "description": "SiteReadyAI Express API",
+  "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "engines": {
+    "node": "22.x"
+  },
   "dependencies": {
     "@google/genai": "^2.13.0",
     "bcrypt": "^6.0.0",

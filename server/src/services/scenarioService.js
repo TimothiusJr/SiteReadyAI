@@ -1,4 +1,4 @@
-import { pool } from '../db/pool.js'
+import pool from '../db/pool.js'
 
 async function attachScenarioContent(scenarios) {
     for (const scenario of scenarios) {
