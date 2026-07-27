@@ -2,6 +2,8 @@ import express from 'express'
 import cors from 'cors'
 import scenarioRoutes from './routes/scenarioRoutes.js'
 import authRoutes from './routes/authRoutes.js'
+import attemptRoutes from './routes/attemptRoutes.js'
+import feedbackRoutes from './routes/feedbackRoutes.js'
 
 const app = express()
 
@@ -25,3 +27,7 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`)
 })
+
+app.use('/api', attemptRoutes)
+
+app.use('/api', feedbackRoutes)
