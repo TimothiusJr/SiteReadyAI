@@ -1,5 +1,6 @@
 import Header from '../components/layout/Header'
 import Sidebar from '../components/layout/Sidebar'
+import Footer from '../components/layout/Footer'
 import { useAuth } from '../context/AuthContext'
 
 function MainLayout({ children }) {
@@ -13,6 +14,8 @@ function MainLayout({ children }) {
                 <main className="public-content">
                     {children}
                 </main>
+
+                <Footer />
             </div>
         )
     }
@@ -24,9 +27,13 @@ function MainLayout({ children }) {
             <div className="app-shell">
                 <Sidebar />
 
-                <main className="main-content">
-                    {children}
-                </main>
+                <div className="content-shell">
+                    <main className="main-content">
+                        {children}
+                    </main>
+
+                    <Footer />
+                </div>
             </div>
         </div>
     )
