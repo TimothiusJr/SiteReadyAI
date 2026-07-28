@@ -1,5 +1,12 @@
-import { createContext, useContext, useState } from 'react'
-import { loginUser } from '../services/authService'
+import {
+    createContext,
+    useContext,
+    useState,
+} from 'react'
+import {
+    loginUser,
+    registerUser,
+} from '../services/authService'
 
 const AuthContext = createContext(null)
 
@@ -11,8 +18,21 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(() => {
         const storedUser = localStorage.getItem('user')
 
-        return storedUser ? JSON.parse(storedUser) : null
+        return storedUser
+            ? JSON.parse(storedUser)
+            : null
     })
+
+    function saveSession(data) {
+        localStorage.setItem('token', data.token)
+        localStorage.setItem(
+            'user',
+            JSON.stringify(data.user),
+        )
+
+        setToken(data.token)
+        setUser(data.user)
+    }
 
     async function login(email, password) {
         const data = await loginUser({
@@ -20,11 +40,19 @@ export function AuthProvider({ children }) {
             password,
         })
 
-        localStorage.setItem('token', data.token)
-        localStorage.setItem('user', JSON.stringify(data.user))
+        saveSession(data)
 
-        setToken(data.token)
-        setUser(data.user)
+        return data
+    }
+
+    async function register(name, email, password) {
+        const data = await registerUser({
+            name,
+            email,
+            password,
+        })
+
+        saveSession(data)
 
         return data
     }
@@ -42,6 +70,7 @@ export function AuthProvider({ children }) {
         user,
         isAuthenticated: Boolean(token),
         login,
+        register,
         logout,
     }
 

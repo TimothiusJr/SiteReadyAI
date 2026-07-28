@@ -15,6 +15,7 @@ import AttemptDetailsPage from './pages/AttemptDetailsPage'
 import DashboardPage from './pages/DashboardPage'
 import LoginPage from './pages/LoginPage'
 import ProgressPage from './pages/ProgressPage'
+import RegisterPage from './pages/RegisterPage'
 import ScenarioPage from './pages/ScenarioPage'
 import { getMyAttempts } from './services/attemptService'
 import { generateFeedback } from './services/feedbackService'
@@ -22,13 +23,21 @@ import { getAllScenarios } from './services/scenarioService'
 
 function App() {
     const [scenarios, setScenarios] = useState([])
-    const [selectedScenario, setSelectedScenario] = useState(null)
+    const [
+        selectedScenario,
+        setSelectedScenario,
+    ] = useState(null)
     const [answer, setAnswer] = useState('')
-    const [feedback, setFeedback] = useState(null)
-    const [progress, setProgress] = useState([])
-    const [attempts, setAttempts] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
-    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [feedback, setFeedback] =
+        useState(null)
+    const [progress, setProgress] =
+        useState([])
+    const [attempts, setAttempts] =
+        useState([])
+    const [isLoading, setIsLoading] =
+        useState(true)
+    const [isSubmitting, setIsSubmitting] =
+        useState(false)
     const [error, setError] = useState(null)
 
     const navigate = useNavigate()
@@ -40,7 +49,9 @@ function App() {
                 const data = await getAllScenarios()
 
                 setScenarios(data)
-                setProgress(createInitialProgress(data))
+                setProgress(
+                    createInitialProgress(data),
+                )
             } catch (error) {
                 setError(error.message)
             } finally {
@@ -59,10 +70,15 @@ function App() {
             }
 
             try {
-                const data = await getMyAttempts(token)
+                const data =
+                    await getMyAttempts(token)
+
                 setAttempts(data)
             } catch (error) {
-                console.error('Failed to load attempts:', error.message)
+                console.error(
+                    'Failed to load attempts:',
+                    error.message,
+                )
             }
         }
 
@@ -96,30 +112,35 @@ function App() {
                 improvements: [],
                 recommendations: [],
             })
+
             return
         }
 
         if (!token) {
             setFeedback({
-                message: 'Your session has expired. Please log in again.',
+                message:
+                    'Your session has expired. Please sign in again.',
                 score: null,
                 summary: '',
                 strengths: [],
                 improvements: [],
                 recommendations: [],
             })
+
             return
         }
 
         if (!selectedScenario) {
             setFeedback({
-                message: 'No scenario is currently selected.',
+                message:
+                    'No scenario is currently selected.',
                 score: null,
                 summary: '',
                 strengths: [],
                 improvements: [],
                 recommendations: [],
             })
+
             return
         }
 
@@ -129,11 +150,13 @@ function App() {
         try {
             const data = await generateFeedback({
                 token,
-                scenarioId: selectedScenario.id,
+                scenarioId:
+                selectedScenario.id,
                 responseText: trimmedAnswer,
             })
 
-            const feedbackResult = data.feedback
+            const feedbackResult =
+                data.feedback
 
             setFeedback({
                 ...feedbackResult,
@@ -142,7 +165,10 @@ function App() {
 
             setProgress((currentProgress) =>
                 currentProgress.map((item) => {
-                    if (item.scenarioId !== selectedScenario.id) {
+                    if (
+                        item.scenarioId !==
+                        selectedScenario.id
+                    ) {
                         return item
                     }
 
@@ -150,13 +176,17 @@ function App() {
                         ...item,
                         completed: true,
                         score: feedbackResult.score,
-                        attempts: item.attempts + 1,
-                        completedAt: new Date().toISOString(),
+                        attempts:
+                            item.attempts + 1,
+                        completedAt:
+                            new Date().toISOString(),
                     }
                 }),
             )
 
-            const updatedAttempts = await getMyAttempts(token)
+            const updatedAttempts =
+                await getMyAttempts(token)
+
             setAttempts(updatedAttempts)
         } catch (error) {
             setFeedback({
@@ -193,10 +223,23 @@ function App() {
             <Routes>
                 <Route
                     path="/"
-                    element={<Navigate to="/dashboard" replace />}
+                    element={
+                        <Navigate
+                            to="/dashboard"
+                            replace
+                        />
+                    }
                 />
 
-                <Route path="/login" element={<LoginPage />} />
+                <Route
+                    path="/login"
+                    element={<LoginPage />}
+                />
+
+                <Route
+                    path="/register"
+                    element={<RegisterPage />}
+                />
 
                 <Route
                     path="/dashboard"
@@ -206,7 +249,9 @@ function App() {
                                 scenarios={scenarios}
                                 progress={progress}
                                 attempts={attempts}
-                                onSelectScenario={handleSelectScenario}
+                                onSelectScenario={
+                                    handleSelectScenario
+                                }
                             />
                         </ProtectedRoute>
                     }
@@ -218,16 +263,27 @@ function App() {
                         <ProtectedRoute>
                             {selectedScenario ? (
                                 <ScenarioPage
-                                    scenario={selectedScenario}
+                                    scenario={
+                                        selectedScenario
+                                    }
                                     answer={answer}
                                     setAnswer={setAnswer}
                                     feedback={feedback}
-                                    isSubmitting={isSubmitting}
-                                    handleSubmit={handleSubmit}
-                                    handleBackToDashboard={handleBackToDashboard}
+                                    isSubmitting={
+                                        isSubmitting
+                                    }
+                                    handleSubmit={
+                                        handleSubmit
+                                    }
+                                    handleBackToDashboard={
+                                        handleBackToDashboard
+                                    }
                                 />
                             ) : (
-                                <Navigate to="/dashboard" replace />
+                                <Navigate
+                                    to="/dashboard"
+                                    replace
+                                />
                             )}
                         </ProtectedRoute>
                     }
@@ -237,7 +293,9 @@ function App() {
                     path="/progress"
                     element={
                         <ProtectedRoute>
-                            <ProgressPage attempts={attempts} />
+                            <ProgressPage
+                                attempts={attempts}
+                            />
                         </ProtectedRoute>
                     }
                 />
@@ -246,14 +304,21 @@ function App() {
                     path="/attempt/:attemptId"
                     element={
                         <ProtectedRoute>
-                            <AttemptDetailsPage attempts={attempts} />
+                            <AttemptDetailsPage
+                                attempts={attempts}
+                            />
                         </ProtectedRoute>
                     }
                 />
 
                 <Route
                     path="*"
-                    element={<Navigate to="/dashboard" replace />}
+                    element={
+                        <Navigate
+                            to="/dashboard"
+                            replace
+                        />
+                    }
                 />
             </Routes>
         </MainLayout>
