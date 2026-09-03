@@ -1473,6 +1473,133 @@ textarea:focus-visible {
   color: var(--jnj-red-dark);
 }
 
+.decision-lab {
+  padding: 25px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  box-shadow: var(--shadow-small);
+}
+
+.lab-progress {
+  margin: 22px 0;
+}
+
+.lab-progress > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 9px;
+}
+
+.lab-progress span {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.lab-progress__track {
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.lab-progress__track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--jnj-red);
+  transition: width 180ms ease;
+}
+
+.dose-case {
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-soft);
+}
+
+.dose-case__label {
+  margin: 0;
+  color: var(--jnj-red-dark);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dose-case h4 {
+  margin: 7px 0 18px;
+  font-size: 22px;
+}
+
+.dose-case dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 0 20px;
+}
+
+.dose-case dl > div {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.dose-case dt {
+  margin-bottom: 5px;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.dose-case dd {
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.dose-case__options {
+  display: grid;
+  gap: 9px;
+}
+
+.dose-case__options label {
+  display: flex;
+  gap: 10px;
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  cursor: pointer;
+  line-height: 1.45;
+}
+
+.dose-case__options input {
+  flex: 0 0 auto;
+  margin-top: 4px;
+  accent-color: var(--jnj-red);
+}
+
+.lab-navigation {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.lab-navigation button {
+  padding: 11px 16px;
+  border-radius: 6px;
+  background: var(--jnj-red);
+}
+
+.lab-navigation button:disabled {
+  background: #aaaaaa;
+}
+
 /* Response */
 
 .response-box {
@@ -1990,7 +2117,8 @@ textarea:focus {
   }
 
   .simulation-steps,
-  .simulation-profile ul {
+  .simulation-profile ul,
+  .dose-case dl {
     grid-template-columns: 1fr;
   }
 }

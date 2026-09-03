@@ -5,6 +5,7 @@ import TrainingQuestions from './TrainingQuestions.jsx'
 import KnowledgeCheck from './KnowledgeCheck.jsx'
 import ReferenceMaterial from './ReferenceMaterial.jsx'
 import ReadinessSimulation from './ReadinessSimulation.jsx'
+import DoseDelayLab from './DoseDelayLab.jsx'
 
 function ScenarioCard({
                           scenario,
@@ -17,10 +18,12 @@ function ScenarioCard({
                           setQuizAnswers,
                           handleQuizSubmit,
                           handleSimulationSubmit,
+                          handleDecisionLabSubmit,
                           handleBackToDashboard,
                       }) {
     const isKnowledgeCheck = scenario.quizQuestions?.length > 0
     const isSimulation = scenario.simulationData?.decisions?.length > 0
+    const isDecisionLab = scenario.decisionLab?.cases?.length > 0
 
     return (
         <section className="scenario-page-content">
@@ -45,7 +48,7 @@ function ScenarioCard({
             <div
                 className={`scenario-content-grid ${
                     isKnowledgeCheck ? 'scenario-content-grid--quiz' : ''
-                } ${isSimulation ? 'scenario-content-grid--simulation' : ''}`}
+                } ${isSimulation || isDecisionLab ? 'scenario-content-grid--simulation' : ''}`}
             >
                 <div className="scenario-information">
                     <ReferenceMaterial
@@ -64,7 +67,14 @@ function ScenarioCard({
                 </div>
 
                 <div className="scenario-response-column">
-                    {isSimulation ? (
+                    {isDecisionLab ? (
+                        <DoseDelayLab
+                            lab={scenario.decisionLab}
+                            feedback={feedback}
+                            isSubmitting={isSubmitting}
+                            onSubmit={handleDecisionLabSubmit}
+                        />
+                    ) : isSimulation ? (
                         <ReadinessSimulation
                             simulation={scenario.simulationData}
                             feedback={feedback}

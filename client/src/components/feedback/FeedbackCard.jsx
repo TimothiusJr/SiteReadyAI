@@ -54,6 +54,8 @@ function FeedbackCard({ feedback }) {
                             ? 'Knowledge Check Results'
                             : feedback.type === 'readiness-simulation'
                                 ? 'Readiness Simulation Results'
+                            : feedback.type === 'decision-lab'
+                                ? 'Dose-Delay Lab Results'
                             : 'AI Evaluation'}
                     </h2>
 
@@ -62,6 +64,8 @@ function FeedbackCard({ feedback }) {
                             ? 'Results based on the current TECVAYLI Prescribing Information.'
                             : feedback.type === 'readiness-simulation'
                                 ? 'Results based on your operational decisions, action plan, and readiness determination.'
+                            : feedback.type === 'decision-lab'
+                                ? 'Results based on TECVAYLI PI Section 2.4, Table 3.'
                             : 'Personalized feedback based on site readiness, safety planning, and operational decision-making.'}
                     </p>
                 </div>

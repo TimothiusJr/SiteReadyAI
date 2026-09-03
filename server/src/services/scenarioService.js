@@ -66,6 +66,20 @@ function hideSimulationAnswers(scenario) {
     }
 }
 
+function hideDecisionLabAnswers(scenario) {
+    if (!scenario.decisionLab) return scenario
+
+    return {
+        ...scenario,
+        decisionLab: {
+            ...scenario.decisionLab,
+            cases: (scenario.decisionLab.cases || []).map(
+                ({ correctOptionId, explanation, ...caseItem }) => caseItem,
+            ),
+        },
+    }
+}
+
 export async function getAllScenarios() {
     const result = await pool.query(`
     SELECT
@@ -77,6 +91,7 @@ export async function getAllScenarios() {
       source_note AS "sourceNote",
       learning_cards AS "learningCards",
       simulation_data AS "simulationData",
+      decision_lab AS "decisionLab",
       quiz_questions AS "quizQuestions"
     FROM scenarios
     ORDER BY id
@@ -85,7 +100,9 @@ export async function getAllScenarios() {
     const scenarios = await attachScenarioContent(result.rows)
 
     return scenarios.map((scenario) =>
-        hideSimulationAnswers(hideQuizAnswers(scenario)),
+        hideDecisionLabAnswers(
+            hideSimulationAnswers(hideQuizAnswers(scenario)),
+        ),
     )
 }
 
@@ -101,6 +118,7 @@ export async function getScenarioById(id) {
         source_note AS "sourceNote",
         learning_cards AS "learningCards",
         simulation_data AS "simulationData",
+        decision_lab AS "decisionLab",
         quiz_questions AS "quizQuestions"
       FROM scenarios
       WHERE id = $1

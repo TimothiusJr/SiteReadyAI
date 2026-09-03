@@ -124,9 +124,42 @@ function gradeReadinessSimulation(simulation, submission) {
     }
 }
 
+function gradeDecisionLab(lab, submission) {
+    const caseResults = lab.cases.map((caseItem) => ({
+        id: caseItem.id,
+        isCorrect: submission.answers[caseItem.id] === caseItem.correctOptionId,
+        explanation: caseItem.explanation,
+        reference: caseItem.reference,
+    }))
+    const correctCount = caseResults.filter((item) => item.isCorrect).length
+    const score = Math.round((correctCount / lab.cases.length) * 100)
+
+    return {
+        score,
+        summary: `You selected the correct restart plan in ${correctCount} of ${lab.cases.length} dose-delay cases.`,
+        strengths: correctCount > 0
+            ? [`Applied PI Table 3 correctly in ${correctCount} cases`]
+            : [],
+        improvements: caseResults
+            .filter((item) => !item.isCorrect)
+            .map((item) => `Review ${item.reference}`),
+        recommendations: [
+            'Compare the last administered dose and elapsed time against PI Table 3 before choosing a restart plan.',
+        ],
+        caseResults,
+        type: 'decision-lab',
+    }
+}
+
 export async function submitFeedback(req, res) {
     try {
-        const { scenarioId, responseText, quizAnswers, simulationSubmission } = req.body
+        const {
+            scenarioId,
+            responseText,
+            quizAnswers,
+            simulationSubmission,
+            decisionLabSubmission,
+        } = req.body
 
         if (!scenarioId) {
             return res.status(400).json({
@@ -144,9 +177,10 @@ export async function submitFeedback(req, res) {
 
         const isKnowledgeCheck = scenario.quizQuestions?.length > 0
         const isSimulation = scenario.simulationData?.decisions?.length > 0
+        const isDecisionLab = scenario.decisionLab?.cases?.length > 0
 
         if (
-            !isKnowledgeCheck && !isSimulation &&
+            !isKnowledgeCheck && !isSimulation && !isDecisionLab &&
             !responseText?.trim()
         ) {
             return res.status(400).json({
@@ -191,7 +225,23 @@ export async function submitFeedback(req, res) {
             })
         }
 
-        const feedback = isSimulation
+        if (
+            isDecisionLab &&
+            (!decisionLabSubmission?.answers ||
+                scenario.decisionLab.cases.some((caseItem) =>
+                    !caseItem.options.some(
+                        (option) => option.id === decisionLabSubmission.answers[caseItem.id],
+                    ),
+                ))
+        ) {
+            return res.status(400).json({
+                message: 'Complete every dose-delay case before submitting',
+            })
+        }
+
+        const feedback = isDecisionLab
+            ? gradeDecisionLab(scenario.decisionLab, decisionLabSubmission)
+            : isSimulation
             ? gradeReadinessSimulation(scenario.simulationData, simulationSubmission)
             : isKnowledgeCheck
             ? gradeKnowledgeCheck(
@@ -203,7 +253,9 @@ export async function submitFeedback(req, res) {
                 responseText,
             })
 
-        const savedResponseText = isSimulation
+        const savedResponseText = isDecisionLab
+            ? JSON.stringify(decisionLabSubmission)
+            : isSimulation
             ? JSON.stringify(simulationSubmission)
             : isKnowledgeCheck
             ? scenario.quizQuestions
@@ -229,7 +281,9 @@ export async function submitFeedback(req, res) {
         })
 
         return res.status(201).json({
-            message: isSimulation
+            message: isDecisionLab
+                ? 'Dose-delay decision lab scored and attempt saved'
+                : isSimulation
                 ? 'Readiness simulation scored and attempt saved'
                 : isKnowledgeCheck
                 ? 'Knowledge check scored and attempt saved'

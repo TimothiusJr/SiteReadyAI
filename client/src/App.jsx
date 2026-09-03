@@ -199,6 +199,38 @@ function App() {
         }
     }
 
+    async function handleDecisionLabSubmit(decisionLabSubmission) {
+        if (!token || !selectedScenario) return
+
+        setIsSubmitting(true)
+        setFeedback(null)
+
+        try {
+            const data = await generateFeedback({
+                token,
+                scenarioId: selectedScenario.id,
+                decisionLabSubmission,
+            })
+            setFeedback({ ...data.feedback, message: data.message })
+            setProgress((current) => current.map((item) =>
+                item.scenarioId === selectedScenario.id
+                    ? {
+                        ...item,
+                        completed: true,
+                        score: data.feedback.score,
+                        attempts: item.attempts + 1,
+                        completedAt: new Date().toISOString(),
+                    }
+                    : item,
+            ))
+            setAttempts(await getMyAttempts(token))
+        } catch (error) {
+            setFeedback({ message: error.message, score: null })
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
     async function handleSubmit() {
         const trimmedAnswer = answer.trim()
 
@@ -379,6 +411,7 @@ function App() {
                                     setQuizAnswers={setQuizAnswers}
                                     handleQuizSubmit={handleQuizSubmit}
                                     handleSimulationSubmit={handleSimulationSubmit}
+                                    handleDecisionLabSubmit={handleDecisionLabSubmit}
                                     handleBackToDashboard={
                                         handleBackToDashboard
                                     }
