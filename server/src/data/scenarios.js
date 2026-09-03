@@ -11,4 +11,10 @@ export const scenarios = [
         description:
             'A large academic center is preparing to launch a new oncology therapy.',
     },
+    {
+        id: 3,
+        title: 'TECVAYLI TEC3 Prescribing Information Challenge',
+        description:
+            'Test your ability to respond to medical-information questions using TECVAYLI Prescribing Information Sections 1 through 5.',
+    },
 ]

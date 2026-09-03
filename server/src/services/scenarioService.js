@@ -34,17 +34,32 @@ async function attachScenarioContent(scenarios) {
     return scenarios
 }
 
+function hideQuizAnswers(scenario) {
+    return {
+        ...scenario,
+        quizQuestions: (scenario.quizQuestions || []).map(
+            ({ correctOptionId, explanation, ...question }) => question,
+        ),
+    }
+}
+
 export async function getAllScenarios() {
     const result = await pool.query(`
     SELECT
       id,
       title,
-      description
+      description,
+      source_url AS "sourceUrl",
+      source_label AS "sourceLabel",
+      source_note AS "sourceNote",
+      quiz_questions AS "quizQuestions"
     FROM scenarios
     ORDER BY id
   `)
 
-    return attachScenarioContent(result.rows)
+    const scenarios = await attachScenarioContent(result.rows)
+
+    return scenarios.map(hideQuizAnswers)
 }
 
 export async function getScenarioById(id) {
@@ -53,7 +68,11 @@ export async function getScenarioById(id) {
       SELECT
         id,
         title,
-        description
+        description,
+        source_url AS "sourceUrl",
+        source_label AS "sourceLabel",
+        source_note AS "sourceNote",
+        quiz_questions AS "quizQuestions"
       FROM scenarios
       WHERE id = $1
     `,
