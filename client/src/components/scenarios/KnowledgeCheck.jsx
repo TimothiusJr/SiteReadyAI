@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 function KnowledgeCheck({
                             questions,
                             answers,
@@ -24,14 +26,6 @@ function KnowledgeCheck({
             ...current,
             [questionId]: optionId,
         }))
-    }
-
-    function openLearningCard(cardId) {
-        const card = document.getElementById(`learning-card-${cardId}`)
-
-        if (card) {
-            card.open = true
-        }
     }
 
     return (
@@ -122,12 +116,11 @@ function KnowledgeCheck({
                                     <p>{result.explanation}</p>
                                     <span>{result.reference}</span>
                                     {!result.isCorrect && result.learningCardId && (
-                                        <a
-                                            href={`#learning-card-${result.learningCardId}`}
-                                            onClick={() => openLearningCard(result.learningCardId)}
+                                        <Link
+                                            to={`/resources#learning-card-${result.learningCardId}`}
                                         >
                                             Review the related learning card
-                                        </a>
+                                        </Link>
                                     )}
                                 </div>
                             )}

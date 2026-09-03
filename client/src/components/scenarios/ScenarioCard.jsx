@@ -49,7 +49,6 @@ function ScenarioCard({
                         label={scenario.sourceLabel}
                         note={scenario.sourceNote}
                         url={scenario.sourceUrl}
-                        cards={scenario.learningCards}
                     />
 
                     {scenario.siteDetails?.length > 0 && (

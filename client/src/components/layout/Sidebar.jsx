@@ -54,14 +54,13 @@ function Sidebar() {
           </span>
         </span>
 
-                <span className="sidebar-disabled">
+                <NavLink
+                    to="/resources"
+                    className={({ isActive }) => (isActive ? 'active' : '')}
+                >
           <SidebarIcon>□</SidebarIcon>
-
-          <span>
-            Learning resources
-            <small>Coming soon</small>
-          </span>
-        </span>
+                    <span>Learning resources</span>
+                </NavLink>
             </nav>
 
             <div className="sidebar-footer">

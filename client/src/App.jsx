@@ -14,6 +14,7 @@ import MainLayout from './layouts/MainLayout'
 import AttemptDetailsPage from './pages/AttemptDetailsPage'
 import DashboardPage from './pages/DashboardPage'
 import LoginPage from './pages/LoginPage'
+import LearningResourcesPage from './pages/LearningResourcesPage'
 import ProgressPage from './pages/ProgressPage'
 import RegisterPage from './pages/RegisterPage'
 import ScenarioPage from './pages/ScenarioPage'
@@ -358,6 +359,15 @@ function App() {
                             <ProgressPage
                                 attempts={attempts}
                             />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/resources"
+                    element={
+                        <ProtectedRoute>
+                            <LearningResourcesPage scenarios={scenarios} />
                         </ProtectedRoute>
                     }
                 />
