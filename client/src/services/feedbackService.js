@@ -6,6 +6,8 @@ export async function generateFeedback({
                                            scenarioId,
                                            responseText,
                                            quizAnswers,
+                                           simulationSubmission,
+                                           decisionLabSubmission,
                                        }) {
     const response = await fetch(`${API_BASE_URL}/feedback`, {
         method: 'POST',
@@ -17,6 +19,8 @@ export async function generateFeedback({
             scenarioId,
             responseText,
             quizAnswers,
+            simulationSubmission,
+            decisionLabSubmission,
         }),
     })
 

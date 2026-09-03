@@ -52,12 +52,20 @@ function FeedbackCard({ feedback }) {
                     <h2>
                         {feedback.type === 'knowledge-check'
                             ? 'Knowledge Check Results'
+                            : feedback.type === 'readiness-simulation'
+                                ? 'Readiness Simulation Results'
+                            : feedback.type === 'decision-lab'
+                                ? 'Dose-Delay Lab Results'
                             : 'AI Evaluation'}
                     </h2>
 
                     <p className="feedback-header-description">
                         {feedback.type === 'knowledge-check'
                             ? 'Results based on the current TECVAYLI Prescribing Information.'
+                            : feedback.type === 'readiness-simulation'
+                                ? 'Results based on your operational decisions, action plan, and readiness determination.'
+                            : feedback.type === 'decision-lab'
+                                ? 'Results based on TECVAYLI PI Section 2.4, Table 3.'
                             : 'Personalized feedback based on site readiness, safety planning, and operational decision-making.'}
                     </p>
                 </div>
@@ -108,6 +116,8 @@ function FeedbackCard({ feedback }) {
                     <h3>
                         {feedback.type === 'knowledge-check'
                             ? 'Sections to Review'
+                            : feedback.type === 'decision-lab'
+                                ? 'Cases to Review'
                             : 'Readiness Gaps'}
                     </h3>
 

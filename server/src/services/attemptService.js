@@ -9,6 +9,8 @@ export async function createAttempt({
                                         improvements,
                                         summary = null,
                                         recommendations = [],
+                                        activityType = null,
+                                        competencyScores = [],
                                     }) {
     const result = await pool.query(
         `
@@ -20,9 +22,11 @@ export async function createAttempt({
                 strengths,
                 improvements,
                 summary,
-                recommendations
+                recommendations,
+                activity_type,
+                competency_scores
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                 RETURNING *
         `,
         [
@@ -34,6 +38,8 @@ export async function createAttempt({
             JSON.stringify(improvements),
             summary,
             JSON.stringify(recommendations),
+            activityType,
+            JSON.stringify(competencyScores),
         ],
     )
 
@@ -53,6 +59,8 @@ export async function getAttemptsByUser(userId) {
                 scenario_attempts.improvements,
                 scenario_attempts.summary,
                 scenario_attempts.recommendations,
+                scenario_attempts.activity_type,
+                scenario_attempts.competency_scores,
                 scenario_attempts.created_at
             FROM scenario_attempts
                      JOIN scenarios

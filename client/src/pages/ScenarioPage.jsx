@@ -10,6 +10,8 @@ function ScenarioPage({
                           quizAnswers,
                           setQuizAnswers,
                           handleQuizSubmit,
+                          handleSimulationSubmit,
+                          handleDecisionLabSubmit,
                           handleBackToDashboard,
                       }) {
     return (
@@ -23,6 +25,8 @@ function ScenarioPage({
             quizAnswers={quizAnswers}
             setQuizAnswers={setQuizAnswers}
             handleQuizSubmit={handleQuizSubmit}
+            handleSimulationSubmit={handleSimulationSubmit}
+            handleDecisionLabSubmit={handleDecisionLabSubmit}
             handleBackToDashboard={handleBackToDashboard}
         />
     )

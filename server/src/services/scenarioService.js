@@ -43,6 +43,43 @@ function hideQuizAnswers(scenario) {
     }
 }
 
+function hideSimulationAnswers(scenario) {
+    if (!scenario.simulationData) return scenario
+
+    return {
+        ...scenario,
+        simulationData: {
+            ...scenario.simulationData,
+            decisions: (scenario.simulationData.decisions || []).map(
+                ({ correctOptionId, explanation, ...decision }) => decision,
+            ),
+            checklist: (scenario.simulationData.checklist || []).map(
+                ({ required, ...item }) => item,
+            ),
+            readiness: scenario.simulationData.readiness
+                ? {
+                    prompt: scenario.simulationData.readiness.prompt,
+                    options: scenario.simulationData.readiness.options,
+                }
+                : null,
+        },
+    }
+}
+
+function hideDecisionLabAnswers(scenario) {
+    if (!scenario.decisionLab) return scenario
+
+    return {
+        ...scenario,
+        decisionLab: {
+            ...scenario.decisionLab,
+            cases: (scenario.decisionLab.cases || []).map(
+                ({ correctOptionId, explanation, ...caseItem }) => caseItem,
+            ),
+        },
+    }
+}
+
 export async function getAllScenarios() {
     const result = await pool.query(`
     SELECT
@@ -52,6 +89,9 @@ export async function getAllScenarios() {
       source_url AS "sourceUrl",
       source_label AS "sourceLabel",
       source_note AS "sourceNote",
+      learning_cards AS "learningCards",
+      simulation_data AS "simulationData",
+      decision_lab AS "decisionLab",
       quiz_questions AS "quizQuestions"
     FROM scenarios
     ORDER BY id
@@ -59,7 +99,11 @@ export async function getAllScenarios() {
 
     const scenarios = await attachScenarioContent(result.rows)
 
-    return scenarios.map(hideQuizAnswers)
+    return scenarios.map((scenario) =>
+        hideDecisionLabAnswers(
+            hideSimulationAnswers(hideQuizAnswers(scenario)),
+        ),
+    )
 }
 
 export async function getScenarioById(id) {
@@ -72,6 +116,9 @@ export async function getScenarioById(id) {
         source_url AS "sourceUrl",
         source_label AS "sourceLabel",
         source_note AS "sourceNote",
+        learning_cards AS "learningCards",
+        simulation_data AS "simulationData",
+        decision_lab AS "decisionLab",
         quiz_questions AS "quizQuestions"
       FROM scenarios
       WHERE id = $1

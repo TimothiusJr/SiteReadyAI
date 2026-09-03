@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 function KnowledgeCheck({
                             questions,
                             answers,
@@ -5,6 +7,7 @@ function KnowledgeCheck({
                             feedback,
                             isSubmitting,
                             handleSubmit,
+                            competencyPerformance = [],
                         }) {
     const answeredCount = Object.keys(answers).length
     const allAnswered = answeredCount === questions.length
@@ -38,6 +41,21 @@ function KnowledgeCheck({
                 </div>
                 <strong>{answeredCount}/{questions.length} answered</strong>
             </header>
+
+            {hasResults && competencyPerformance.length > 0 && (
+                <div className="competency-performance">
+                    <strong>Performance by topic</strong>
+                    <div className="competency-performance__grid">
+                        {competencyPerformance.map((item) => (
+                            <div key={item.competency}>
+                                <span>{item.competency}</span>
+                                <strong>{item.correct}/{item.total}</strong>
+                                <small>{item.score}%</small>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             <div className="knowledge-check__questions">
                 {questions.map((question, questionIndex) => {
@@ -97,6 +115,13 @@ function KnowledgeCheck({
                                     </strong>
                                     <p>{result.explanation}</p>
                                     <span>{result.reference}</span>
+                                    {!result.isCorrect && result.learningCardId && (
+                                        <Link
+                                            to={`/resources#learning-card-${result.learningCardId}`}
+                                        >
+                                            Review the related learning card
+                                        </Link>
+                                    )}
                                 </div>
                             )}
                         </fieldset>

@@ -14,6 +14,7 @@ import MainLayout from './layouts/MainLayout'
 import AttemptDetailsPage from './pages/AttemptDetailsPage'
 import DashboardPage from './pages/DashboardPage'
 import LoginPage from './pages/LoginPage'
+import LearningResourcesPage from './pages/LearningResourcesPage'
 import ProgressPage from './pages/ProgressPage'
 import RegisterPage from './pages/RegisterPage'
 import ScenarioPage from './pages/ScenarioPage'
@@ -153,6 +154,78 @@ function App() {
                 improvements: [],
                 recommendations: [],
             })
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
+    async function handleSimulationSubmit(simulationSubmission) {
+        if (!token || !selectedScenario) return
+
+        setIsSubmitting(true)
+        setFeedback(null)
+
+        try {
+            const data = await generateFeedback({
+                token,
+                scenarioId: selectedScenario.id,
+                simulationSubmission,
+            })
+
+            setFeedback({ ...data.feedback, message: data.message })
+            setProgress((current) => current.map((item) =>
+                item.scenarioId === selectedScenario.id
+                    ? {
+                        ...item,
+                        completed: true,
+                        score: data.feedback.score,
+                        attempts: item.attempts + 1,
+                        completedAt: new Date().toISOString(),
+                    }
+                    : item,
+            ))
+            setAttempts(await getMyAttempts(token))
+        } catch (error) {
+            setFeedback({
+                message: error.message,
+                score: null,
+                summary: '',
+                strengths: [],
+                improvements: [],
+                recommendations: [],
+            })
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
+    async function handleDecisionLabSubmit(decisionLabSubmission) {
+        if (!token || !selectedScenario) return
+
+        setIsSubmitting(true)
+        setFeedback(null)
+
+        try {
+            const data = await generateFeedback({
+                token,
+                scenarioId: selectedScenario.id,
+                decisionLabSubmission,
+            })
+            setFeedback({ ...data.feedback, message: data.message })
+            setProgress((current) => current.map((item) =>
+                item.scenarioId === selectedScenario.id
+                    ? {
+                        ...item,
+                        completed: true,
+                        score: data.feedback.score,
+                        attempts: item.attempts + 1,
+                        completedAt: new Date().toISOString(),
+                    }
+                    : item,
+            ))
+            setAttempts(await getMyAttempts(token))
+        } catch (error) {
+            setFeedback({ message: error.message, score: null })
         } finally {
             setIsSubmitting(false)
         }
@@ -337,6 +410,8 @@ function App() {
                                     quizAnswers={quizAnswers}
                                     setQuizAnswers={setQuizAnswers}
                                     handleQuizSubmit={handleQuizSubmit}
+                                    handleSimulationSubmit={handleSimulationSubmit}
+                                    handleDecisionLabSubmit={handleDecisionLabSubmit}
                                     handleBackToDashboard={
                                         handleBackToDashboard
                                     }
@@ -358,6 +433,15 @@ function App() {
                             <ProgressPage
                                 attempts={attempts}
                             />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/resources"
+                    element={
+                        <ProtectedRoute>
+                            <LearningResourcesPage scenarios={scenarios} />
                         </ProtectedRoute>
                     }
                 />

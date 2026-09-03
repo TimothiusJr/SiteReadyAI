@@ -11,6 +11,7 @@ function ReferenceMaterial({ label, note, url }) {
             <a href={url} target="_blank" rel="noreferrer">
                 Open Prescribing Information
             </a>
+
         </div>
     )
 }
