@@ -876,11 +876,15 @@ textarea:focus-visible {
 }
 
 .scenario-content-grid--quiz {
-  grid-template-columns: minmax(240px, 0.55fr) minmax(0, 1.45fr);
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .scenario-content-grid--quiz .scenario-response-column {
   position: static;
+}
+
+.scenario-content-grid--quiz .scenario-information {
+  margin-bottom: 4px;
 }
 
 .reference-material p:not(.section-eyebrow) {
@@ -897,10 +901,16 @@ textarea:focus-visible {
 
 .learning-library {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: 10px;
   margin-top: 26px;
   padding-top: 22px;
   border-top: 1px solid var(--border);
+}
+
+.learning-library__heading {
+  grid-column: 1 / -1;
 }
 
 .learning-library__heading h4 {
@@ -1662,6 +1672,10 @@ textarea:focus {
 
   .submitted-response-card {
     grid-column: auto;
+  }
+
+  .learning-library {
+    grid-template-columns: 1fr;
   }
 }
 
