@@ -883,6 +883,39 @@ textarea:focus-visible {
   position: static;
 }
 
+.scenario-content-grid--simulation {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.scenario-content-grid--simulation .scenario-response-column {
+  position: static;
+}
+
+.scenario-content-grid--simulation .reference-material {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 4px 24px;
+  padding: 18px 22px;
+}
+
+.scenario-content-grid--simulation .reference-material .section-eyebrow,
+.scenario-content-grid--simulation .reference-material h3,
+.scenario-content-grid--simulation .reference-material p {
+  grid-column: 1;
+  margin: 0;
+}
+
+.scenario-content-grid--simulation .reference-material a {
+  grid-column: 2;
+  grid-row: 1 / 4;
+  margin: 0;
+  padding: 10px 13px;
+  border: 1px solid var(--jnj-red-border);
+  border-radius: 6px;
+  text-decoration: none;
+}
+
 .scenario-content-grid--quiz .scenario-information {
   margin-bottom: 4px;
 }
@@ -1265,6 +1298,61 @@ textarea:focus-visible {
   line-height: 1.55;
 }
 
+.simulation-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.simulation-steps span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 6px;
+  background: var(--jnj-red-soft);
+  color: var(--jnj-red-dark);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.simulation-steps strong {
+  display: grid;
+  flex: 0 0 24px;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--jnj-red);
+  color: white;
+}
+
+.simulation-section-heading > span,
+.simulation-step-label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--jnj-red-dark);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.simulation-section-heading h4 {
+  margin: 0 0 5px;
+  font-size: 20px;
+}
+
+.simulation-section-heading p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.simulation-section-heading--decisions {
+  margin: 26px 0 4px;
+}
+
 .simulation-profile,
 .simulation-checklist {
   margin: 20px 0;
@@ -1278,9 +1366,32 @@ textarea:focus-visible {
   margin: 0 0 10px;
 }
 
+.simulation-profile ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
 .simulation-profile li {
-  margin-bottom: 8px;
+  position: relative;
+  margin: 0;
+  padding: 13px 13px 13px 36px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
   line-height: 1.5;
+}
+
+.simulation-profile li::before {
+  position: absolute;
+  top: 14px;
+  left: 13px;
+  color: var(--jnj-red-dark);
+  content: "✓";
+  font-weight: 900;
 }
 
 .simulation-decision {
@@ -1290,6 +1401,10 @@ textarea:focus-visible {
   padding: 20px 0;
   border: 0;
   border-bottom: 1px solid var(--border);
+}
+
+.simulation-decision:not(:last-of-type) {
+  margin-bottom: 4px;
 }
 
 .simulation-decision legend {
@@ -1862,6 +1977,21 @@ textarea:focus {
 
   .resource-group__header {
     flex-direction: column;
+  }
+
+  .scenario-content-grid--simulation .reference-material {
+    grid-template-columns: 1fr;
+  }
+
+  .scenario-content-grid--simulation .reference-material a {
+    grid-column: 1;
+    grid-row: auto;
+    margin-top: 10px;
+  }
+
+  .simulation-steps,
+  .simulation-profile ul {
+    grid-template-columns: 1fr;
   }
 }
 

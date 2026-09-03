@@ -24,9 +24,26 @@ function ReadinessSimulation({ simulation, feedback, isSubmitting, onSubmit }) {
                 <p>{simulation.instructions}</p>
             </header>
 
+            <div className="simulation-steps" aria-label="Simulation steps">
+                <span><strong>1</strong> Site profile</span>
+                <span><strong>2</strong> Decisions</span>
+                <span><strong>3</strong> Action plan</span>
+                <span><strong>4</strong> Readiness</span>
+            </div>
+
             <div className="simulation-profile">
-                <h4>Site profile</h4>
+                <div className="simulation-section-heading">
+                    <span>Step 1</span>
+                    <h4>Review the site profile</h4>
+                    <p>Use these conditions when making every decision below.</p>
+                </div>
                 <ul>{simulation.siteProfile.map((item) => <li key={item}>{item}</li>)}</ul>
+            </div>
+
+            <div className="simulation-section-heading simulation-section-heading--decisions">
+                <span>Step 2</span>
+                <h4>Make operational decisions</h4>
+                <p>Select the strongest response for each site-readiness issue.</p>
             </div>
 
             {simulation.decisions.map((decision, index) => {
@@ -61,8 +78,11 @@ function ReadinessSimulation({ simulation, feedback, isSubmitting, onSubmit }) {
             })}
 
             <section className="simulation-checklist">
-                <h4>Build the pre-launch action plan</h4>
-                <p>Select every action you would require before launch.</p>
+                <div className="simulation-section-heading">
+                    <span>Step 3</span>
+                    <h4>Build the pre-launch action plan</h4>
+                    <p>Select every action you would require before launch.</p>
+                </div>
                 {simulation.checklist.map((item) => (
                     <label key={item.id}>
                         <input
@@ -77,7 +97,10 @@ function ReadinessSimulation({ simulation, feedback, isSubmitting, onSubmit }) {
             </section>
 
             <fieldset className="simulation-decision">
-                <legend>{simulation.readiness.prompt}</legend>
+                <legend>
+                    <span className="simulation-step-label">Step 4</span>
+                    {simulation.readiness.prompt}
+                </legend>
                 {simulation.readiness.options.map((option) => (
                     <label key={option.id}>
                         <input

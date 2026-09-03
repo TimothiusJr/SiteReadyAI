@@ -45,7 +45,7 @@ function ScenarioCard({
             <div
                 className={`scenario-content-grid ${
                     isKnowledgeCheck ? 'scenario-content-grid--quiz' : ''
-                }`}
+                } ${isSimulation ? 'scenario-content-grid--simulation' : ''}`}
             >
                 <div className="scenario-information">
                     <ReferenceMaterial
