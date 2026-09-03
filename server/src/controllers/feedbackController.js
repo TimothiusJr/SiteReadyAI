@@ -127,6 +127,7 @@ function gradeReadinessSimulation(simulation, submission) {
 function gradeDecisionLab(lab, submission) {
     const caseResults = lab.cases.map((caseItem) => ({
         id: caseItem.id,
+        title: caseItem.title,
         isCorrect: submission.answers[caseItem.id] === caseItem.correctOptionId,
         explanation: caseItem.explanation,
         reference: caseItem.reference,
@@ -142,7 +143,7 @@ function gradeDecisionLab(lab, submission) {
             : [],
         improvements: caseResults
             .filter((item) => !item.isCorrect)
-            .map((item) => `Review ${item.reference}`),
+            .map((item) => `${item.title} - review ${item.reference}`),
         recommendations: [
             'Compare the last administered dose and elapsed time against PI Table 3 before choosing a restart plan.',
         ],

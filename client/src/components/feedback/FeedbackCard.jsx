@@ -116,6 +116,8 @@ function FeedbackCard({ feedback }) {
                     <h3>
                         {feedback.type === 'knowledge-check'
                             ? 'Sections to Review'
+                            : feedback.type === 'decision-lab'
+                                ? 'Cases to Review'
                             : 'Readiness Gaps'}
                     </h3>
 
