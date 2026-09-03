@@ -30,6 +30,8 @@ function App() {
     const [answer, setAnswer] = useState('')
     const [feedback, setFeedback] =
         useState(null)
+    const [quizAnswers, setQuizAnswers] =
+        useState({})
     const [progress, setProgress] =
         useState([])
     const [attempts, setAttempts] =
@@ -89,6 +91,7 @@ function App() {
         setSelectedScenario(scenario)
         setAnswer('')
         setFeedback(null)
+        setQuizAnswers({})
         navigate('/scenario')
     }
 
@@ -96,7 +99,63 @@ function App() {
         setSelectedScenario(null)
         setAnswer('')
         setFeedback(null)
+        setQuizAnswers({})
         navigate('/dashboard')
+    }
+
+    async function handleQuizSubmit() {
+        if (!token) {
+            setFeedback({
+                message: 'Your session has expired. Please sign in again.',
+                score: null,
+            })
+            return
+        }
+
+        if (!selectedScenario) return
+
+        setIsSubmitting(true)
+        setFeedback(null)
+
+        try {
+            const data = await generateFeedback({
+                token,
+                scenarioId: selectedScenario.id,
+                quizAnswers,
+            })
+
+            setFeedback({
+                ...data.feedback,
+                message: data.message,
+            })
+
+            setProgress((currentProgress) =>
+                currentProgress.map((item) =>
+                    item.scenarioId === selectedScenario.id
+                        ? {
+                            ...item,
+                            completed: true,
+                            score: data.feedback.score,
+                            attempts: item.attempts + 1,
+                            completedAt: new Date().toISOString(),
+                        }
+                        : item,
+                ),
+            )
+
+            setAttempts(await getMyAttempts(token))
+        } catch (error) {
+            setFeedback({
+                message: error.message,
+                score: null,
+                summary: '',
+                strengths: [],
+                improvements: [],
+                recommendations: [],
+            })
+        } finally {
+            setIsSubmitting(false)
+        }
     }
 
     async function handleSubmit() {
@@ -275,6 +334,9 @@ function App() {
                                     handleSubmit={
                                         handleSubmit
                                     }
+                                    quizAnswers={quizAnswers}
+                                    setQuizAnswers={setQuizAnswers}
+                                    handleQuizSubmit={handleQuizSubmit}
                                     handleBackToDashboard={
                                         handleBackToDashboard
                                     }

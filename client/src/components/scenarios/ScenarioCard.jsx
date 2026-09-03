@@ -2,6 +2,8 @@ import FeedbackCard from '../feedback/FeedbackCard'
 import ResponseBox from '../feedback/ResponseBox.jsx'
 import SiteDetails from './SiteDetails.jsx'
 import TrainingQuestions from './TrainingQuestions.jsx'
+import KnowledgeCheck from './KnowledgeCheck.jsx'
+import ReferenceMaterial from './ReferenceMaterial.jsx'
 
 function ScenarioCard({
                           scenario,
@@ -10,8 +12,13 @@ function ScenarioCard({
                           feedback,
                           isSubmitting,
                           handleSubmit,
+                          quizAnswers,
+                          setQuizAnswers,
+                          handleQuizSubmit,
                           handleBackToDashboard,
                       }) {
+    const isKnowledgeCheck = scenario.quizQuestions?.length > 0
+
     return (
         <section className="scenario-page-content">
             <button
@@ -32,21 +39,46 @@ function ScenarioCard({
                 <p>{scenario.description}</p>
             </header>
 
-            <div className="scenario-content-grid">
+            <div
+                className={`scenario-content-grid ${
+                    isKnowledgeCheck ? 'scenario-content-grid--quiz' : ''
+                }`}
+            >
                 <div className="scenario-information">
-                    <SiteDetails details={scenario.siteDetails} />
+                    <ReferenceMaterial
+                        label={scenario.sourceLabel}
+                        note={scenario.sourceNote}
+                        url={scenario.sourceUrl}
+                    />
 
-                    <TrainingQuestions questions={scenario.questions} />
+                    {scenario.siteDetails?.length > 0 && (
+                        <SiteDetails details={scenario.siteDetails} />
+                    )}
+
+                    {scenario.questions?.length > 0 && (
+                        <TrainingQuestions questions={scenario.questions} />
+                    )}
                 </div>
 
                 <div className="scenario-response-column">
-                    <ResponseBox
-                        answer={answer}
-                        setAnswer={setAnswer}
-                        feedback={feedback}
-                        isSubmitting={isSubmitting}
-                        handleSubmit={handleSubmit}
-                    />
+                    {isKnowledgeCheck ? (
+                        <KnowledgeCheck
+                            questions={scenario.quizQuestions}
+                            answers={quizAnswers}
+                            setAnswers={setQuizAnswers}
+                            feedback={feedback}
+                            isSubmitting={isSubmitting}
+                            handleSubmit={handleQuizSubmit}
+                        />
+                    ) : (
+                        <ResponseBox
+                            answer={answer}
+                            setAnswer={setAnswer}
+                            feedback={feedback}
+                            isSubmitting={isSubmitting}
+                            handleSubmit={handleSubmit}
+                        />
+                    )}
                 </div>
             </div>
 

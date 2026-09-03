@@ -49,11 +49,16 @@ function FeedbackCard({ feedback }) {
                         Performance Review
                     </p>
 
-                    <h2>AI Evaluation</h2>
+                    <h2>
+                        {feedback.type === 'knowledge-check'
+                            ? 'Knowledge Check Results'
+                            : 'AI Evaluation'}
+                    </h2>
 
                     <p className="feedback-header-description">
-                        Personalized feedback based on site readiness,
-                        safety planning, and operational decision-making.
+                        {feedback.type === 'knowledge-check'
+                            ? 'Results based on the current TECVAYLI Prescribing Information.'
+                            : 'Personalized feedback based on site readiness, safety planning, and operational decision-making.'}
                     </p>
                 </div>
 
@@ -100,7 +105,11 @@ function FeedbackCard({ feedback }) {
                 </div>
 
                 <div className="feedback-section feedback-section--column">
-                    <h3>Readiness Gaps</h3>
+                    <h3>
+                        {feedback.type === 'knowledge-check'
+                            ? 'Sections to Review'
+                            : 'Readiness Gaps'}
+                    </h3>
 
                     {feedback.improvements?.length > 0 ? (
                         <ul>
@@ -119,7 +128,11 @@ function FeedbackCard({ feedback }) {
             </div>
 
             <div className="feedback-section">
-                <h3>Recommended Next Steps</h3>
+                <h3>
+                    {feedback.type === 'knowledge-check'
+                        ? 'Study Recommendation'
+                        : 'Recommended Next Steps'}
+                </h3>
 
                 {feedback.recommendations?.length > 0 ? (
                     <ol>
