@@ -120,6 +120,26 @@ function gradeReadinessSimulation(simulation, submission) {
             'Review the linked PI resources, revise the site action plan, and repeat the simulation.',
         ],
         decisionResults,
+        competencyPerformance: [
+            ...decisionResults.map((item) => ({
+                competency: item.competency,
+                correct: item.isCorrect ? 1 : 0,
+                total: 1,
+                score: item.isCorrect ? 100 : 0,
+            })),
+            {
+                competency: 'Action planning',
+                correct: selectedRequired.length,
+                total: requiredActions.length,
+                score: Math.round((selectedRequired.length / requiredActions.length) * 100),
+            },
+            {
+                competency: 'Readiness determination',
+                correct: readinessCorrect ? 1 : 0,
+                total: 1,
+                score: readinessCorrect ? 100 : 0,
+            },
+        ],
         type: 'readiness-simulation',
     }
 }
@@ -148,6 +168,12 @@ function gradeDecisionLab(lab, submission) {
             'Compare the last administered dose and elapsed time against PI Table 3 before choosing a restart plan.',
         ],
         caseResults,
+        competencyPerformance: [{
+            competency: 'Dose-delay decisions',
+            correct: correctCount,
+            total: lab.cases.length,
+            score,
+        }],
         type: 'decision-lab',
     }
 }
@@ -279,6 +305,8 @@ export async function submitFeedback(req, res) {
             improvements: feedback.improvements,
             summary: feedback.summary,
             recommendations: feedback.recommendations,
+            activityType: feedback.type,
+            competencyScores: feedback.competencyPerformance || [],
         })
 
         return res.status(201).json({

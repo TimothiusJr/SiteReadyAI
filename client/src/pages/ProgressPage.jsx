@@ -26,6 +26,31 @@ function ProgressPage({ attempts = [] }) {
             : null
 
     const latestAttempt = attempts[0]
+    const competencySummary = Object.values(
+        attempts.reduce((summary, attempt) => {
+            const scores = attempt.competency_scores || []
+
+            scores.forEach((item) => {
+                if (!summary[item.competency]) {
+                    summary[item.competency] = {
+                        competency: item.competency,
+                        scores: [],
+                    }
+                }
+                summary[item.competency].scores.push(item.score)
+            })
+            return summary
+        }, {}),
+    )
+        .map((item) => ({
+            competency: item.competency,
+            score: Math.round(
+                item.scores.reduce((total, score) => total + score, 0) /
+                item.scores.length,
+            ),
+            attempts: item.scores.length,
+        }))
+        .sort((a, b) => a.score - b.score)
 
     return (
         <section className="progress-page">
@@ -67,6 +92,36 @@ function ProgressPage({ attempts = [] }) {
                     </strong>
                 </div>
             </div>
+
+            <section className="competency-dashboard">
+                <div className="section-heading">
+                    <div>
+                        <p className="section-eyebrow">Competency View</p>
+                        <h3>MIL capability profile</h3>
+                    </div>
+                    <p>Scores combine your PI knowledge, applied decisions, and readiness planning.</p>
+                </div>
+
+                {competencySummary.length === 0 ? (
+                    <p className="competency-empty">Complete a TECVAYLI activity to begin building your capability profile.</p>
+                ) : (
+                    <div className="competency-grid">
+                        {competencySummary.map((item) => (
+                            <article className="competency-card" key={item.competency}>
+                                <div>
+                                    <h4>{item.competency}</h4>
+                                    <span>{item.attempts} scored {item.attempts === 1 ? 'activity' : 'activities'}</span>
+                                </div>
+                                <strong>{item.score}%</strong>
+                                <div className="competency-meter" aria-label={`${item.competency}: ${item.score}%`}>
+                                    <span style={{ width: `${item.score}%` }} />
+                                </div>
+                                <small>{item.score >= 80 ? 'Proficient' : item.score >= 60 ? 'Developing' : 'Priority review'}</small>
+                            </article>
+                        ))}
+                    </div>
+                )}
+            </section>
 
             <section className="dashboard-section">
                 <div className="section-heading">

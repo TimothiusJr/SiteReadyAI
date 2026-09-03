@@ -1811,6 +1811,72 @@ textarea:focus {
   gap: 30px;
 }
 
+.competency-dashboard {
+  padding: 26px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  box-shadow: var(--shadow-small);
+}
+
+.competency-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.competency-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface-soft);
+}
+
+.competency-card h4 {
+  margin: 0 0 5px;
+  font-size: 15px;
+}
+
+.competency-card div > span,
+.competency-card small {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.competency-card > strong {
+  color: var(--jnj-red-dark);
+  font-size: 22px;
+}
+
+.competency-meter {
+  grid-column: 1 / -1;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.competency-meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--jnj-red);
+}
+
+.competency-card small {
+  grid-column: 1 / -1;
+  font-weight: 800;
+}
+
+.competency-empty {
+  margin: 18px 0 0;
+  color: var(--text-secondary);
+}
+
 .attempt-history {
   margin-top: 0;
 }
