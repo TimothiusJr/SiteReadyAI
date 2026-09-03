@@ -52,6 +52,7 @@ export async function getAllScenarios() {
       source_url AS "sourceUrl",
       source_label AS "sourceLabel",
       source_note AS "sourceNote",
+      learning_cards AS "learningCards",
       quiz_questions AS "quizQuestions"
     FROM scenarios
     ORDER BY id
@@ -72,6 +73,7 @@ export async function getScenarioById(id) {
         source_url AS "sourceUrl",
         source_label AS "sourceLabel",
         source_note AS "sourceNote",
+        learning_cards AS "learningCards",
         quiz_questions AS "quizQuestions"
       FROM scenarios
       WHERE id = $1

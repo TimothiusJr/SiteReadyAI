@@ -49,6 +49,7 @@ function ScenarioCard({
                         label={scenario.sourceLabel}
                         note={scenario.sourceNote}
                         url={scenario.sourceUrl}
+                        cards={scenario.learningCards}
                     />
 
                     {scenario.siteDetails?.length > 0 && (
@@ -69,6 +70,7 @@ function ScenarioCard({
                             feedback={feedback}
                             isSubmitting={isSubmitting}
                             handleSubmit={handleQuizSubmit}
+                            competencyPerformance={feedback?.competencyPerformance}
                         />
                     ) : (
                         <ResponseBox

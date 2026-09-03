@@ -15,6 +15,8 @@ function gradeKnowledgeCheck(quizQuestions, quizAnswers) {
             isCorrect,
             explanation: question.explanation,
             reference: question.reference,
+            learningCardId: question.learningCardId,
+            competency: question.competency,
         }
     })
 
@@ -31,6 +33,27 @@ function gradeKnowledgeCheck(quizQuestions, quizAnswers) {
                 .map((result) => result.reference),
         ),
     ]
+    const competencyPerformance = Object.values(
+        questionResults.reduce((performance, result) => {
+            const competency = result.competency || result.reference
+
+            if (!performance[competency]) {
+                performance[competency] = {
+                    competency,
+                    correct: 0,
+                    total: 0,
+                }
+            }
+
+            performance[competency].total += 1
+            performance[competency].correct += result.isCorrect ? 1 : 0
+
+            return performance
+        }, {}),
+    ).map((item) => ({
+        ...item,
+        score: Math.round((item.correct / item.total) * 100),
+    }))
 
     return {
         score,
@@ -50,6 +73,7 @@ function gradeKnowledgeCheck(quizQuestions, quizAnswers) {
                     'Continue using the current Prescribing Information as the source of truth.',
                 ],
         questionResults,
+        competencyPerformance,
         type: 'knowledge-check',
     }
 }

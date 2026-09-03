@@ -895,6 +895,84 @@ textarea:focus-visible {
   font-weight: 800;
 }
 
+.learning-library {
+  display: grid;
+  gap: 10px;
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border);
+}
+
+.learning-library__heading h4 {
+  margin: 6px 0;
+  font-size: 19px;
+}
+
+.learning-library__heading p:last-child {
+  margin: 0 0 8px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.learning-card {
+  scroll-margin-top: 120px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface-soft);
+}
+
+.learning-card:target {
+  border-color: var(--jnj-red);
+  box-shadow: 0 0 0 3px var(--jnj-red-soft);
+}
+
+.learning-card summary {
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+  cursor: pointer;
+}
+
+.learning-card summary span {
+  color: var(--jnj-red-dark);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.learning-card__content {
+  padding: 0 14px 15px;
+  border-top: 1px solid var(--border);
+}
+
+.learning-card__content ul {
+  display: grid;
+  gap: 8px;
+  padding-left: 20px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.learning-card__application {
+  margin: 14px 0;
+  padding: 12px;
+  border-left: 3px solid var(--jnj-red);
+  border-radius: 4px;
+  background: var(--jnj-red-soft);
+}
+
+.learning-card__application p {
+  margin: 5px 0 0;
+  font-size: 13px;
+}
+
+.learning-card__content small {
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+
 .knowledge-check {
   padding: 25px;
   border: 1px solid var(--border);
@@ -937,6 +1015,41 @@ textarea:focus-visible {
   display: grid;
   gap: 22px;
   margin-top: 24px;
+}
+
+.competency-performance {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 7px;
+  background: var(--surface-soft);
+}
+
+.competency-performance__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.competency-performance__grid > div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 10px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.competency-performance__grid span {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.competency-performance__grid small {
+  grid-column: 1 / -1;
+  color: var(--text-secondary);
 }
 
 .quiz-question {
@@ -1040,6 +1153,15 @@ textarea:focus-visible {
 
 .quiz-rationale span {
   color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.quiz-rationale a {
+  display: block;
+  width: fit-content;
+  margin-top: 9px;
+  color: var(--jnj-red-dark);
   font-size: 12px;
   font-weight: 800;
 }
