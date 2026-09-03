@@ -78,9 +78,55 @@ function gradeKnowledgeCheck(quizQuestions, quizAnswers) {
     }
 }
 
+function gradeReadinessSimulation(simulation, submission) {
+    const decisionResults = simulation.decisions.map((decision) => ({
+        id: decision.id,
+        isCorrect: submission.decisions[decision.id] === decision.correctOptionId,
+        explanation: decision.explanation,
+        reference: decision.reference,
+        learningCardId: decision.learningCardId,
+        competency: decision.competency,
+    }))
+    const correctDecisions = decisionResults.filter((item) => item.isCorrect).length
+    const requiredActions = simulation.checklist.filter((item) => item.required)
+    const selectedRequired = requiredActions.filter((item) =>
+        submission.actions.includes(item.id),
+    )
+    const unnecessaryActions = simulation.checklist.filter((item) =>
+        !item.required && submission.actions.includes(item.id),
+    )
+    const readinessCorrect =
+        submission.readinessDecision === simulation.readiness.correctOptionId
+    const decisionScore = (correctDecisions / simulation.decisions.length) * 60
+    const actionScore = (selectedRequired.length / requiredActions.length) * 25
+    const score = Math.round(decisionScore + actionScore + (readinessCorrect ? 15 : 0))
+    const missedActions = requiredActions.filter((item) =>
+        !submission.actions.includes(item.id),
+    )
+
+    return {
+        score,
+        summary: `You made ${correctDecisions} of ${simulation.decisions.length} strong decisions and selected ${selectedRequired.length} of ${requiredActions.length} required pre-launch actions.`,
+        strengths: [
+            ...(correctDecisions > 0 ? [`Made ${correctDecisions} PI-aligned operational decisions`] : []),
+            ...(readinessCorrect ? ['Assigned the appropriate overall readiness status'] : []),
+        ],
+        improvements: [
+            ...decisionResults.filter((item) => !item.isCorrect).map((item) => `Review ${item.reference}`),
+            ...missedActions.map((item) => `Add to action plan: ${item.label}`),
+            ...unnecessaryActions.map((item) => `Reconsider action: ${item.label}`),
+        ],
+        recommendations: [
+            'Review the linked PI resources, revise the site action plan, and repeat the simulation.',
+        ],
+        decisionResults,
+        type: 'readiness-simulation',
+    }
+}
+
 export async function submitFeedback(req, res) {
     try {
-        const { scenarioId, responseText, quizAnswers } = req.body
+        const { scenarioId, responseText, quizAnswers, simulationSubmission } = req.body
 
         if (!scenarioId) {
             return res.status(400).json({
@@ -97,9 +143,10 @@ export async function submitFeedback(req, res) {
         }
 
         const isKnowledgeCheck = scenario.quizQuestions?.length > 0
+        const isSimulation = scenario.simulationData?.decisions?.length > 0
 
         if (
-            !isKnowledgeCheck &&
+            !isKnowledgeCheck && !isSimulation &&
             !responseText?.trim()
         ) {
             return res.status(400).json({
@@ -125,7 +172,28 @@ export async function submitFeedback(req, res) {
             })
         }
 
-        const feedback = isKnowledgeCheck
+        if (
+            isSimulation &&
+            (!simulationSubmission ||
+                !simulationSubmission.decisions ||
+                !Array.isArray(simulationSubmission.actions) ||
+                scenario.simulationData.decisions.some(
+                    (decision) => !decision.options.some(
+                        (option) => option.id === simulationSubmission.decisions[decision.id],
+                    ),
+                ) ||
+                !scenario.simulationData.readiness.options.some(
+                    (option) => option.id === simulationSubmission.readinessDecision,
+                ))
+        ) {
+            return res.status(400).json({
+                message: 'Complete every simulation decision before submitting',
+            })
+        }
+
+        const feedback = isSimulation
+            ? gradeReadinessSimulation(scenario.simulationData, simulationSubmission)
+            : isKnowledgeCheck
             ? gradeKnowledgeCheck(
                 scenario.quizQuestions,
                 quizAnswers,
@@ -135,7 +203,9 @@ export async function submitFeedback(req, res) {
                 responseText,
             })
 
-        const savedResponseText = isKnowledgeCheck
+        const savedResponseText = isSimulation
+            ? JSON.stringify(simulationSubmission)
+            : isKnowledgeCheck
             ? scenario.quizQuestions
                 .map((question, index) => {
                     const selectedOption = question.options.find(
@@ -159,7 +229,9 @@ export async function submitFeedback(req, res) {
         })
 
         return res.status(201).json({
-            message: isKnowledgeCheck
+            message: isSimulation
+                ? 'Readiness simulation scored and attempt saved'
+                : isKnowledgeCheck
                 ? 'Knowledge check scored and attempt saved'
                 : 'AI feedback generated and attempt saved',
             feedback,

@@ -4,6 +4,7 @@ import SiteDetails from './SiteDetails.jsx'
 import TrainingQuestions from './TrainingQuestions.jsx'
 import KnowledgeCheck from './KnowledgeCheck.jsx'
 import ReferenceMaterial from './ReferenceMaterial.jsx'
+import ReadinessSimulation from './ReadinessSimulation.jsx'
 
 function ScenarioCard({
                           scenario,
@@ -15,9 +16,11 @@ function ScenarioCard({
                           quizAnswers,
                           setQuizAnswers,
                           handleQuizSubmit,
+                          handleSimulationSubmit,
                           handleBackToDashboard,
                       }) {
     const isKnowledgeCheck = scenario.quizQuestions?.length > 0
+    const isSimulation = scenario.simulationData?.decisions?.length > 0
 
     return (
         <section className="scenario-page-content">
@@ -61,7 +64,14 @@ function ScenarioCard({
                 </div>
 
                 <div className="scenario-response-column">
-                    {isKnowledgeCheck ? (
+                    {isSimulation ? (
+                        <ReadinessSimulation
+                            simulation={scenario.simulationData}
+                            feedback={feedback}
+                            isSubmitting={isSubmitting}
+                            onSubmit={handleSimulationSubmit}
+                        />
+                    ) : isKnowledgeCheck ? (
                         <KnowledgeCheck
                             questions={scenario.quizQuestions}
                             answers={quizAnswers}

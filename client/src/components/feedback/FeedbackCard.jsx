@@ -52,12 +52,16 @@ function FeedbackCard({ feedback }) {
                     <h2>
                         {feedback.type === 'knowledge-check'
                             ? 'Knowledge Check Results'
+                            : feedback.type === 'readiness-simulation'
+                                ? 'Readiness Simulation Results'
                             : 'AI Evaluation'}
                     </h2>
 
                     <p className="feedback-header-description">
                         {feedback.type === 'knowledge-check'
                             ? 'Results based on the current TECVAYLI Prescribing Information.'
+                            : feedback.type === 'readiness-simulation'
+                                ? 'Results based on your operational decisions, action plan, and readiness determination.'
                             : 'Personalized feedback based on site readiness, safety planning, and operational decision-making.'}
                     </p>
                 </div>
